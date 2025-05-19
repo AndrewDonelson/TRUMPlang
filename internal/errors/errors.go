@@ -17,8 +17,9 @@ func init() {
 // Error types
 const (
 	// Lexer errors
-	ILLEGAL_CHARACTER   = "ILLEGAL_CHARACTER"
-	UNTERMINATED_STRING = "UNTERMINATED_STRING"
+	ILLEGAL_CHARACTER    = "ILLEGAL_CHARACTER"
+	UNTERMINATED_STRING  = "UNTERMINATED_STRING"
+	UNTERMINATED_COMMENT = "UNTERMINATED_COMMENT"
 
 	// Parser errors
 	UNEXPECTED_TOKEN    = "UNEXPECTED_TOKEN"
@@ -76,6 +77,11 @@ var errorMessages = map[string][]string{
 		"SAD! Unterminated string at %d:%d. You open quotes but don't close them. TOTAL CHAOS!",
 		"YOUR QUOTES ARE A DISASTER at %d:%d! People say I know the best quotes. These are terrible quotes!",
 		"WHERE'S THE CLOSING QUOTE? at %d:%d This is worse than the NATIONAL DEBT!",
+	},
+	UNTERMINATED_COMMENT: {
+		"YOUR COMMENT NEVER ENDS at %d:%d! Just like CNN's FAKE NEWS coverage!",
+		"COMMENT CATASTROPHE at %d:%d! You start talking but never stop. Like the Democrats in Congress!",
+		"ENDLESS COMMENT DISASTER at %d:%d! We need to BUILD A WALL to close these comments!",
 	},
 
 	// Parser errors

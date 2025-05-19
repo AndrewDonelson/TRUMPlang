@@ -19,7 +19,7 @@ const (
 	// Special tokens
 	ILLEGAL = "ILLEGAL" // Unknown token
 	EOF     = "EOF"     // End of file
-	COMMENT = "COMMENT" // Comment
+	COMMENT = "COMMENT" // Comment (includes single-line and multi-line)
 
 	// Identifiers and literals
 	IDENT  = "IDENT"  // Variable or function name

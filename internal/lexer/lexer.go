@@ -70,11 +70,25 @@ func (l *Lexer) NextToken() token.Token {
 			tok = newToken(token.BANG, l.ch, l.line, l.column)
 		}
 	case '*':
+		// Check for end of multi-line comment
+		if l.peekChar() == '/' {
+			l.readChar()        // Skip '/'
+			tok = l.NextToken() // Skip the comment end and return the next token
+			return tok
+		}
 		tok = newToken(token.ASTERISK, l.ch, l.line, l.column)
 	case '/':
+		// Check for single-line comment
 		if l.peekChar() == '/' {
 			l.readChar() // Skip second '/'
 			comment := l.readComment()
+			tok = token.Token{Type: token.COMMENT, Literal: comment, Line: l.line, Column: l.column}
+			return tok
+		}
+		// Check for multi-line comment start
+		if l.peekChar() == '*' {
+			l.readChar() // Skip '*'
+			comment := l.readMultiLineComment()
 			tok = token.Token{Type: token.COMMENT, Literal: comment, Line: l.line, Column: l.column}
 			return tok
 		}

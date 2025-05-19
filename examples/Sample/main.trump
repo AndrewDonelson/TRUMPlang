@@ -1,0 +1,52 @@
+// file: hello_world.trump
+// A tremendous TRUMP language program
+
+/* 
+ * This is a multiline comment in TRUMP language!
+ * The best language, believe me.
+ * Nobody codes better than this.
+ */
+
+// Say hello to the world, Trump style
+TWEET "Hello, World! It's going to be TREMENDOUS!";
+
+/* As everyone knows,
+ * TRUMP language has the best functions
+ * Much better than any other language!
+ */
+// Define a yuge function with a tremendous rating
+YUGE FUNCTION greet(name) RATED 10/10 {
+    TWEET "Hello, " + name + "! You're doing a FANTASTIC job!";
+    RETURN "Greeted " + name;
+}
+
+// Call our function
+greet("America");
+
+// Use a BUILD WALL IF statement
+YUGE value = 45;
+BUILD WALL IF (value == 45) {
+    RALLY "That's the BEST number, BELIEVE ME!";
+} ELSE {
+    TWEET "Not a great number. SAD!";
+}
+
+/* Make deals in a loop
+ * The best loops, tremendous loops
+ */
+YUGE counter = 0;
+MAKE DEALS WHILE (counter < 3) {
+    TWEET "Making deal #" + counter;
+    counter = counter + 1;
+}
+
+// For loop to make America great again
+MAKE AMERICA GREAT AGAIN FOR (YUGE i = 0; i < 3; i = i + 1) {
+    TWEET "Making America Great Again: " + i;
+}
+
+// Using some special built-in functions
+YUGE numbers = [3, 1, 2, 45, 6];
+TWEET "Original array: " + numbers;
+TWEET "After TREMENDOUS_SORT: " + TREMENDOUS_SORT(numbers);
+TWEET "After AMERICA_FIRST: " + AMERICA_FIRST(numbers);

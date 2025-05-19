@@ -1,5 +1,5 @@
-// file: cmd/trumpc/main.go
-// description: Main entry point for the TRUMP language compiler and interpreter
+// file: main.go
+// description: Main entry point for the TRUMP language compiler and interpreter - updated to show multi-line comments
 
 package main
 
@@ -67,7 +67,13 @@ func printUsage() {
 	fmt.Println("  --no-fake-news        - Suppress warnings")
 }
 
-// Build a Trump program
+/*
+ * buildTrump builds a TRUMP program from source to a .djt file.
+ * It compiles the program into an abstract syntax tree representation.
+ *
+ * Input: A .trump source file
+ * Output: A .djt executable file
+ */
 func buildTrump(args []string, verbose bool, noFakeNews bool) {
 	if len(args) < 1 {
 		fmt.Println(errors.NewTrumpError(errors.MISSING_ARGUMENT, "Please specify a .trump file to build", 0, 0))
@@ -174,7 +180,14 @@ func runTrump(args []string, verbose bool) {
 	}
 }
 
-// Create a new Trump project
+/*
+ * createTrump creates a new TRUMP project with sample code.
+ *
+ * This function:
+ * 1. Creates a new directory
+ * 2. Creates a sample hello_world.trump file
+ * 3. Creates a README file
+ */
 func createTrump(args []string) {
 	if len(args) < 1 {
 		fmt.Println(errors.NewTrumpError(errors.MISSING_ARGUMENT, "Please specify a project name", 0, 0))
@@ -182,7 +195,7 @@ func createTrump(args []string) {
 	}
 
 	projectName := args[0]
-	
+
 	// Create project directory
 	err := os.Mkdir(projectName, 0755)
 	if err != nil {
@@ -194,9 +207,19 @@ func createTrump(args []string) {
 	sampleCode := `// file: hello_world.trump
 // A tremendous TRUMP language program
 
+/* 
+ * This is a multiline comment in TRUMP language!
+ * The best language, believe me.
+ * Nobody codes better than this.
+ */
+
 // Say hello to the world, Trump style
 TWEET "Hello, World! It's going to be TREMENDOUS!";
 
+/* As everyone knows,
+ * TRUMP language has the best functions
+ * Much better than any other language!
+ */
 // Define a yuge function with a tremendous rating
 YUGE FUNCTION greet(name) RATED 10/10 {
     TWEET "Hello, " + name + "! You're doing a FANTASTIC job!";
@@ -214,7 +237,9 @@ BUILD WALL IF (value == 45) {
     TWEET "Not a great number. SAD!";
 }
 
-// Use a loop to make deals while a condition is true
+/* Make deals in a loop
+ * The best loops, tremendous loops
+ */
 YUGE counter = 0;
 MAKE DEALS WHILE (counter < 3) {
     TWEET "Making deal #" + counter;
@@ -266,6 +291,8 @@ This will create a hello_world.djt file.
 - Loops with MAKE DEALS WHILE and MAKE AMERICA GREAT AGAIN FOR
 - Output with TWEET, RALLY, and EXECUTIVE_ORDER
 - Special built-in functions like TREMENDOUS_SORT and AMERICA_FIRST
+- Single-line comments with //
+- Multi-line comments with /* ... */
 
 Enjoy making your code great again!
 `
@@ -284,7 +311,15 @@ Enjoy making your code great again!
 	fmt.Println("  trumpc run", filePath)
 }
 
-// Inspect a Trump program without compiling
+/* inspectTrump analyzes a TRUMP program without compiling it.
+ * It provides detailed information about:
+ * - Lexical analysis of tokens
+ * - Syntax analysis of the program structure
+ * - Token and statement statistics
+ *
+ * This is great for debugging and educational purposes,
+ * showing the tremendous inner workings of the language!
+ */
 func inspectTrump(args []string) {
 	if len(args) < 1 {
 		fmt.Println(errors.NewTrumpError(errors.MISSING_ARGUMENT, "Please specify a .trump file to inspect", 0, 0))
@@ -308,74 +343,78 @@ func inspectTrump(args []string) {
 
 	// Create a lexer for the input
 	l := lexer.New(string(input))
-	
+
 	// Check for lexer errors
 	fmt.Println("INSPECTING FILE:", inputFile)
 	fmt.Println("==========================")
-	
+
 	// Phase 1: Lexical analysis
 	fmt.Println("PHASE 1: LEXICAL ANALYSIS")
-	
+
 	// Count tokens for stats
 	tokenCount := 0
 	identifierCount := 0
 	keywordCount := 0
 	literalCount := 0
-	
+	commentCount := 0
+
 	// Preview the first few tokens
 	previewTokens := []string{}
 	previewLimit := 10
-	
+
 	for {
 		tok := l.NextToken()
 		tokenCount++
-		
+
 		// Count token types
 		switch {
 		case tok.Type == "IDENT":
 			identifierCount++
 		case tok.Type == "INT" || tok.Type == "FLOAT" || tok.Type == "STRING":
 			literalCount++
-		case tok.Type != "EOF" && tok.Type != "ILLEGAL" && 
-			tok.Type != ";" && tok.Type != "," && tok.Type != "(" && tok.Type != ")" && 
+		case tok.Type == "COMMENT":
+			commentCount++
+		case tok.Type != "EOF" && tok.Type != "ILLEGAL" &&
+			tok.Type != ";" && tok.Type != "," && tok.Type != "(" && tok.Type != ")" &&
 			tok.Type != "{" && tok.Type != "}" && tok.Type != "[" && tok.Type != "]" &&
 			tok.Type != "=" && tok.Type != "+" && tok.Type != "-" && tok.Type != "*" && tok.Type != "/":
 			keywordCount++
 		}
-		
+
 		// Add to preview
 		if len(previewTokens) < previewLimit {
 			tokenDesc := fmt.Sprintf("%s (%s)", tok.Literal, tok.Type)
 			previewTokens = append(previewTokens, tokenDesc)
 		}
-		
+
 		if tok.Type == "EOF" {
 			break
 		}
 	}
-	
+
 	// Print token preview
 	fmt.Println("Token preview:")
 	for i, token := range previewTokens {
 		fmt.Printf("  %d. %s\n", i+1, token)
 	}
 	fmt.Println("  ...")
-	
+
 	// Print token stats
 	fmt.Println("\nToken statistics:")
 	fmt.Printf("  Total tokens: %d\n", tokenCount)
 	fmt.Printf("  Identifiers: %d\n", identifierCount)
 	fmt.Printf("  Keywords: %d\n", keywordCount)
 	fmt.Printf("  Literals: %d\n", literalCount)
-	
+	fmt.Printf("  Comments: %d\n", commentCount)
+
 	// Reset the lexer and parse the program
 	l = lexer.New(string(input))
 	p := parser.New(l)
 	program := p.Parse()
-	
+
 	// Phase 2: Syntax analysis
 	fmt.Println("\nPHASE 2: SYNTAX ANALYSIS")
-	
+
 	// Check for parsing errors
 	if len(p.Errors()) > 0 {
 		fmt.Println(errors.NewTrumpError(errors.SYNTAX_ERROR, "Parsing errors found", 0, 0))
@@ -384,10 +423,10 @@ func inspectTrump(args []string) {
 		}
 		os.Exit(1)
 	}
-	
+
 	// Count statement types
 	statementCount := len(program.Statements)
-	
+
 	// Count statement types
 	letCount := 0
 	returnCount := 0
@@ -397,11 +436,11 @@ func inspectTrump(args []string) {
 	rallyCount := 0
 	execOrderCount := 0
 	expressionCount := 0
-	
+
 	// This is a basic approximation since we can't traverse the AST easily without adding methods
 	for _, stmt := range program.Statements {
 		stmtStr := stmt.String()
-		
+
 		switch {
 		case strings.HasPrefix(stmtStr, "YUGE") || strings.HasPrefix(stmtStr, "TREMENDOUS"):
 			letCount++
@@ -421,7 +460,7 @@ func inspectTrump(args []string) {
 			expressionCount++
 		}
 	}
-	
+
 	// Print syntax stats
 	fmt.Println("No syntax errors found!")
 	fmt.Println("\nStatement statistics:")
@@ -434,23 +473,27 @@ func inspectTrump(args []string) {
 	fmt.Printf("  Rally statements: %d\n", rallyCount)
 	fmt.Printf("  Executive orders: %d\n", execOrderCount)
 	fmt.Printf("  Expression statements: %d\n", expressionCount)
-	
+
 	// Overall assessment
 	fmt.Println("\nOVERALL ASSESSMENT")
 	fmt.Println("THIS CODE IS TREMENDOUS! No errors found. BELIEVE ME!")
 	fmt.Println("It's ready to MAKE PROGRAMMING GREAT AGAIN!")
-	
+
+	if commentCount > 0 {
+		fmt.Println("Great documentation with comments. SO TRANSPARENT! THE MOST TRANSPARENT EVER!")
+	}
+
 	if tweetCount > 0 {
 		fmt.Println("Lots of tweets in this program. GREAT COMMUNICATION!")
 	}
-	
+
 	if ifCount > 0 {
 		fmt.Println("Building walls with conditional statements. VERY SECURE!")
 	}
-	
+
 	if loopCount > 0 {
 		fmt.Println("Making great deals in loops. THE BEST DEALS!")
 	}
-	
+
 	fmt.Println("\nInspection complete. This program is PERFECT - like my phone call with Ukraine!")
 }

@@ -1,9 +1,10 @@
-// file: internal/lexer/lexer_helpers.go
+// file: internal/lexer/helpers.go
 // description: Helper functions for the TRUMP language lexer
 
 package lexer
 
 import (
+	"strings"
 	"unicode"
 	"unicode/utf8"
 
@@ -52,13 +53,69 @@ func (l *Lexer) readWord() string {
 	return l.input[position:l.position]
 }
 
-// Read a multi-line comment
+// Read a single-line comment
 func (l *Lexer) readComment() string {
 	startPosition := l.position
 	for l.ch != '\n' && l.ch != 0 {
 		l.readChar()
 	}
 	return l.input[startPosition:l.position]
+}
+
+// Read a multi-line comment
+func (l *Lexer) readMultiLineComment() string {
+	startPosition := l.position
+	startLine := l.line
+	startColumn := l.column
+
+	for {
+		l.readChar()
+		// Check for end of comment
+		if l.ch == '*' && l.peekChar() == '/' {
+			l.readChar() // consume '*'
+			l.readChar() // consume '/'
+			break
+		}
+
+		// Check for unterminated comment
+		if l.ch == 0 {
+			errorMsg := errors.NewTrumpError(errors.SYNTAX_ERROR, "Unterminated multi-line comment", startLine, startColumn)
+			l.addError(errorMsg)
+			break
+		}
+
+		// Handle newlines in multi-line comments
+		if l.ch == '\n' {
+			l.line++
+			l.column = 0
+		}
+	}
+
+	// Extract the comment excluding the /* and */ markers
+	comment := l.input[startPosition : l.position-2]
+
+	// Format multi-line comment
+	return formatMultiLineComment(comment)
+}
+
+// Format a multi-line comment to clean up any common patterns like
+// /* This
+//   - is
+//   - a comment
+//     */
+func formatMultiLineComment(comment string) string {
+	lines := strings.Split(comment, "\n")
+	for i, line := range lines {
+		// Trim spaces at beginning and end
+		line = strings.TrimSpace(line)
+		// Remove common * prefix from lines
+		if strings.HasPrefix(line, "*") {
+			line = strings.TrimPrefix(line, "*")
+			line = strings.TrimSpace(line)
+		}
+		lines[i] = line
+	}
+	return strings.Join(lines, "\n")
 }
 
 // Read a string literal
