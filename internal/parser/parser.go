@@ -4,7 +4,6 @@
 package parser
 
 import (
-	"github.com/AndrewDonelson/trumplang/internal/errors"
 	"github.com/AndrewDonelson/trumplang/internal/lexer"
 	"github.com/AndrewDonelson/trumplang/internal/lexer/token"
 )
@@ -14,7 +13,7 @@ const (
 	_ int = iota
 	LOWEST
 	EQUALS      // ==
-	LESSGREATER // > or
+	LESSGREATER // > or <
 	SUM         // +
 	PRODUCT     // *
 	PREFIX      // -X or !X
@@ -111,6 +110,13 @@ func (p *Parser) Parse() *Program {
 	}
 
 	for !p.curTokenIs(token.EOF) {
+		// Skip comments before parsing statements
+		p.skipComments()
+
+		if p.curTokenIs(token.EOF) {
+			break
+		}
+
 		stmt := p.parseStatement()
 		if stmt != nil {
 			program.Statements = append(program.Statements, stmt)
@@ -124,11 +130,4 @@ func (p *Parser) Parse() *Program {
 // Errors returns the list of errors encountered during parsing
 func (p *Parser) Errors() []string {
 	return p.errors
-}
-
-// Add a parsing error
-func (p *Parser) addError(code, msg string) {
-	line, column := p.curToken.Line, p.curToken.Column
-	err := errors.NewTrumpError(code, msg, line, column)
-	p.errors = append(p.errors, err)
 }

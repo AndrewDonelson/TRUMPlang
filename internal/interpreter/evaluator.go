@@ -73,6 +73,7 @@ func (e *Evaluator) Eval(node parser.Node) Object {
 			return val
 		}
 		e.env.Set(node.Name.Value, val)
+		return val // Return the value for chaining
 	case *parser.ReturnStatement:
 		val := e.Eval(node.ReturnValue)
 		if IsError(val) {
@@ -154,7 +155,10 @@ func (e *Evaluator) Eval(node parser.Node) Object {
 		}
 
 		return e.applyFunction(function, args)
+	case nil:
+		// Handle nil nodes (can happen if parsing fails in some cases)
+		return e.NULL
 	}
 
-	return nil
+	return e.NULL
 }

@@ -72,11 +72,33 @@ func (p *Parser) parseExpressionList(end token.TokenType) []Expression {
 	}
 
 	p.nextToken()
+
+	// Handle comments inside expression lists
+	if p.curTokenIs(token.COMMENT) {
+		p.nextToken()
+	}
+
+	// Ensure we don't hit the end bracket after skipping comments
+	if p.curTokenIs(end) {
+		return list
+	}
+
 	list = append(list, p.parseExpression(LOWEST))
 
 	for p.peekTokenIs(token.COMMA) {
 		p.nextToken()
 		p.nextToken()
+
+		// Handle comments after commas
+		if p.curTokenIs(token.COMMENT) {
+			p.nextToken()
+		}
+
+		// If we reach the end after a comment, stop
+		if p.curTokenIs(end) {
+			break
+		}
+
 		list = append(list, p.parseExpression(LOWEST))
 	}
 
@@ -103,13 +125,18 @@ func (p *Parser) parseFunctionLiteral() Expression {
 	if p.peekTokenIs(token.RATED) {
 		p.nextToken()
 
-		if !p.peekTokenIs(token.INT) && !p.peekTokenIs(token.FLOAT) && !p.peekTokenIs(token.STRING) {
-			p.addError(errors.UNEXPECTED_TOKEN, "Expected rating value after RATED")
-			return nil
+		// Get rating value
+		p.nextToken()
+		ratingStart := p.curToken.Literal
+
+		// Check for division format (e.g., 10/10)
+		if p.peekTokenIs(token.SLASH) {
+			p.nextToken() // consume slash
+			p.nextToken() // get denominator
+			ratingStart = ratingStart + "/" + p.curToken.Literal
 		}
 
-		p.nextToken()
-		lit.Rating = p.curToken.Literal
+		lit.Rating = ratingStart
 	}
 
 	if !p.expectPeek(token.LBRACE) {

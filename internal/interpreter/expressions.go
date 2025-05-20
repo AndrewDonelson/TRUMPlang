@@ -58,6 +58,18 @@ func (e *Evaluator) evalInfixExpression(operator string, left, right Object) Obj
 		return e.evalFloatInfixExpression(operator, left, &Float{Value: intValue})
 	case left.Type() == STRING_OBJ && right.Type() == STRING_OBJ:
 		return e.evalStringInfixExpression(operator, left, right)
+	case left.Type() == STRING_OBJ && (right.Type() == INTEGER_OBJ || right.Type() == FLOAT_OBJ || right.Type() == BOOLEAN_OBJ || right.Type() == ARRAY_OBJ):
+		// Allow string concatenation with other types
+		if operator == "+" {
+			return &String{Value: left.(*String).Value + right.Inspect()}
+		}
+		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
+	case (left.Type() == INTEGER_OBJ || left.Type() == FLOAT_OBJ || left.Type() == BOOLEAN_OBJ || left.Type() == ARRAY_OBJ) && right.Type() == STRING_OBJ:
+		// Allow string concatenation with other types
+		if operator == "+" {
+			return &String{Value: left.Inspect() + right.(*String).Value}
+		}
+		return newError("unknown operator: %s %s %s", left.Type(), operator, right.Type())
 	case operator == "==":
 		return e.nativeBoolToBooleanObject(left == right)
 	case operator == "!=":

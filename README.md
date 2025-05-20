@@ -1,172 +1,188 @@
 # TRUMP Programming Language
 
-A tremendous programming language inspired by Donald Trump's speaking style. BELIEVE ME, it's going to be YUGE!
+A tremendously great programming language - the best language, believe me!
 
 ## Overview
 
-TRUMP (Tremendously Radical Universal Multi-Purpose Programming) is a programming language that combines traditional programming concepts with the unique linguistic style of Donald Trump. It's designed to be both functional and entertaining, featuring Trump-themed syntax and error messages.
-
-## Features
-
-- **Trump-style syntax**: Write code that sounds like Trump's speeches
-- **Variable declarations with YUGE and TREMENDOUS**
-- **Conditional statements with BUILD WALL IF/ELSE**
-- **Loop constructs with MAKE DEALS WHILE and MAKE AMERICA GREAT AGAIN FOR**
-- **Output with TWEET, RALLY, and EXECUTIVE_ORDER**
-- **Specialized built-in functions like TREMENDOUS_SORT and AMERICA_FIRST**
-- **Trump-themed error messages**: When code fails, it fails in the most tremendous way
+TRUMP is a satirical programming language inspired by the rhetoric of former U.S. President Donald Trump. It combines humor with actual programming language features to create a fully functional, if unconventional, programming experience.
 
 ## Installation
 
 ### Prerequisites
 
-- Go 1.22 or later
+- Go 1.22 or higher
 
 ### Building from Source
 
 ```bash
+# Clone the repository
 git clone https://github.com/AndrewDonelson/trumplang.git
 cd trumplang
-make
+
+# Build the compiler
+go build -o trumpc ./cmd/trumpc
+
+# Add to PATH (optional)
+# On Linux/macOS:
+sudo cp trumpc /usr/local/bin/
+# On Windows: Add the directory to your PATH environment variable
 ```
 
-### Running the Examples
+## Getting Started
+
+### Creating a New Project
 
 ```bash
-# Run the "Hello, World!" example
-./build/trumpc run examples/hello/main.trump
-
-# Run the Fibonacci example
-./build/trumpc run examples/fibonacci/main.trump
+./trumpc create MyFirstProject
 ```
 
-## Language Reference
+This creates a new directory with a template `main.trump` file and a README.
 
-### Variable Declaration
+### Running a TRUMP Program
+
+```bash
+# Run a project directory (looks for main.trump)
+./trumpc run MyFirstProject
+
+# Or run a specific file
+./trumpc run MyFirstProject/main.trump
+```
+
+### Inspecting a TRUMP Program
+
+```bash
+./trumpc inspect MyFirstProject/main.trump
+```
+
+This shows detailed information about the tokens and syntax of your program.
+
+### Building a TRUMP Program
+
+```bash
+./trumpc build MyFirstProject/main.trump
+```
+
+This compiles the program to a `.djt` file.
+
+## Language Syntax
+
+### Variables
+
+Variables are declared with `YUGE` or `TREMENDOUS`:
 
 ```
-YUGE variableName = value;      // For regular variables
-TREMENDOUS bigVariable = value; // For particularly important variables
+YUGE name = "Trump";
+TREMENDOUS number = 45;
 ```
 
 ### Functions
 
+Functions are defined with the `FUNCTION` keyword and can have ratings:
+
 ```
-YUGE FUNCTION functionName(param1, param2) RATED "10/10" {
-    // Function body
-    RETURN value;
+YUGE FUNCTION greet(name) RATED 10/10 {
+    TWEET "Hello, " + name + "! You're doing a FANTASTIC job!";
+    RETURN "Greeted " + name;
 }
 ```
 
-### Conditional Statements
+### Control Flow
+
+#### If Statements
 
 ```
-BUILD WALL IF (condition) {
-    // Code to execute if condition is true
+BUILD WALL IF (value == 45) {
+    RALLY "That's the BEST number, BELIEVE ME!";
 } ELSE {
-    // Code to execute if condition is false
+    TWEET "Not a great number. SAD!";
 }
 ```
 
-### Loops
+#### While Loops
 
 ```
-// While loop
-MAKE DEALS WHILE (condition) {
-    // Loop body
-}
-
-// For loop
-MAKE AMERICA GREAT AGAIN FOR (initialization; condition; update) {
-    // Loop body
+YUGE counter = 0;
+MAKE DEALS WHILE (counter < 3) {
+    TWEET "Making deal #" + counter;
+    counter = counter + 1;
 }
 ```
 
-### Output Statements
+#### For Loops
 
 ```
-TWEET expression;               // Regular output
-RALLY expression;               // Emphasized output with Trump-style flourishes
-EXECUTIVE_ORDER expression;     // Error/warning output
+MAKE AMERICA GREAT AGAIN FOR (YUGE i = 0; i < 3; i = i + 1) {
+    TWEET "Making America Great Again: " + i;
+}
 ```
 
-### Built-in Functions
+### Output
 
-- `TREMENDOUS_SORT(array)` - Sorts an array (with a small chance of being unpredictable)
-- `AMERICA_FIRST(array)` - Prioritizes the value 45 in an array
-- `DEAL(value1, value2)` - Swaps two values
-- `len(string/array)` - Returns the length 
-- `first(array)` - Returns the first element
-- `last(array)` - Returns the last element
-- `rest(array)` - Returns all elements except the first
-- `push(array, element)` - Adds an element to an array
+```
+TWEET "Normal output";                   // Standard output
+RALLY "Emphasized output";               // Emphasized output (ALL CAPS with random Trump-like emphasis)
+EXECUTIVE_ORDER "Warning or error";      // Error output
+```
 
 ### Data Types
 
-- Integers
-- Floats
-- Strings
-- Booleans (`WINNING` for true, `LOSER` for false)
-- Arrays
-- Functions
+- Integers: `45`
+- Floats: `3.14`
+- Strings: `"Make Programming Great Again"`
+- Arrays: `[1, 2, 3, 45]`
+- Booleans: `WINNING` (true) and `LOSER` (false)
 
 ### Comments
 
 ```
-// Regular comment
+// Single-line comment
 
-FAKE NEWS: Trump-style comment for longer explanations
+/* 
+ * Multi-line comment
+ * The best comments, believe me!
+ */
 ```
 
-## Command-Line Interface
+### Built-in Functions
 
-TRUMP comes with a command-line interface (CLI) for various operations:
-
-```bash
-# Build a TRUMP program
-trumpc build file.trump
-
-# Run a TRUMP program directly
-trumpc run file.trump
-
-# Create a new TRUMP project
-trumpc create myproject
-
-# Check a program for errors without compiling
-trumpc inspect file.trump
-```
+- `TREMENDOUS_SORT(array)` - Sorts an array (with a twist)
+- `AMERICA_FIRST(array)` - Prioritizes certain elements in an array
+- Standard functions: `len`, `first`, `last`, `rest`, `push`
 
 ## Examples
 
 ### Hello World
 
 ```
-// file: examples/hello/main.trump
-// description: Hello World example in TRUMP language
-
-FAKE NEWS: The simplest TRUMP program ever written!
-FAKE NEWS: This will be TREMENDOUS! BELIEVE ME!
-
-// Say hello to the world, Trump style
 TWEET "Hello, World! It's going to be TREMENDOUS!";
-
-// Build a terrific message
-TREMENDOUS message = "MAKE PROGRAMMING GREAT AGAIN!";
-RALLY message;
 ```
 
-### Fibonacci Sequence
+### Calculating Factorial
 
-See the [Fibonacci example](examples/fibonacci/main.trump) for a more complex program.
+```
+YUGE FUNCTION factorial(n) RATED 10/10 {
+    BUILD WALL IF (n <= 1) {
+        RETURN 1;
+    } ELSE {
+        RETURN n * factorial(n - 1);
+    }
+}
+
+TWEET "Factorial of 5 is: " + factorial(5);
+```
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions to make TRUMP even greater are welcome! Please feel free to submit pull requests or report issues.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Disclaimer
 
-This project is created for entertainment and educational purposes. It's meant to be a humorous take on programming languages and is not intended to make any political statement.
+This project is satirical and meant for humor and educational purposes only. It is not affiliated with or endorsed by Donald Trump or any political entity.
+
+---
+
+Made with love to bring humor to programming. Let's Make Programming Great Again!

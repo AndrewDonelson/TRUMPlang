@@ -3,6 +3,10 @@
 
 package interpreter
 
+import (
+	"sort"
+)
+
 // Register built-in functions
 func (e *Evaluator) registerBuiltins() {
 	// Standard library functions
@@ -141,7 +145,6 @@ func (e *Evaluator) registerBuiltins() {
 				return newError("argument to TREMENDOUS_SORT must be ARRAY, got %s", args[0].Type())
 			}
 
-			// This is just a simple bubble sort, but it's "the best sorting algorithm ever"
 			array := args[0].(*Array)
 			elements := array.Elements
 			length := len(elements)
@@ -150,29 +153,30 @@ func (e *Evaluator) registerBuiltins() {
 			newElements := make([]Object, length)
 			copy(newElements, elements)
 
-			// Use a simple bubble sort (not efficient, but Trump wouldn't care about that)
-			for i := 0; i < length; i++ {
-				for j := 0; j < length-i-1; j++ {
-					// Compare integers
-					if elements[j].Type() == INTEGER_OBJ && elements[j+1].Type() == INTEGER_OBJ {
-						if elements[j].(*Integer).Value > elements[j+1].(*Integer).Value {
-							newElements[j], newElements[j+1] = newElements[j+1], newElements[j]
-						}
-					}
-					// Compare floats
-					if elements[j].Type() == FLOAT_OBJ && elements[j+1].Type() == FLOAT_OBJ {
-						if elements[j].(*Float).Value > elements[j+1].(*Float).Value {
-							newElements[j], newElements[j+1] = newElements[j+1], newElements[j]
-						}
-					}
-					// Compare strings
-					if elements[j].Type() == STRING_OBJ && elements[j+1].Type() == STRING_OBJ {
-						if elements[j].(*String).Value > elements[j+1].(*String).Value {
-							newElements[j], newElements[j+1] = newElements[j+1], newElements[j]
-						}
-					}
+			// Sort the elements
+			sort.SliceStable(newElements, func(i, j int) bool {
+				// Compare integers
+				if newElements[i].Type() == INTEGER_OBJ && newElements[j].Type() == INTEGER_OBJ {
+					return newElements[i].(*Integer).Value < newElements[j].(*Integer).Value
 				}
-			}
+				// Compare floats
+				if newElements[i].Type() == FLOAT_OBJ && newElements[j].Type() == FLOAT_OBJ {
+					return newElements[i].(*Float).Value < newElements[j].(*Float).Value
+				}
+				// Compare integer and float
+				if newElements[i].Type() == INTEGER_OBJ && newElements[j].Type() == FLOAT_OBJ {
+					return float64(newElements[i].(*Integer).Value) < newElements[j].(*Float).Value
+				}
+				if newElements[i].Type() == FLOAT_OBJ && newElements[j].Type() == INTEGER_OBJ {
+					return newElements[i].(*Float).Value < float64(newElements[j].(*Integer).Value)
+				}
+				// Compare strings
+				if newElements[i].Type() == STRING_OBJ && newElements[j].Type() == STRING_OBJ {
+					return newElements[i].(*String).Value < newElements[j].(*String).Value
+				}
+				// Default to the current order
+				return i < j
+			})
 
 			// Add a 10% chance to randomly swap two elements, because Trump is unpredictable
 			if e.rand.Float64() < 0.1 && length > 1 {
@@ -217,6 +221,33 @@ func (e *Evaluator) registerBuiltins() {
 			}
 
 			return &Array{Elements: newElements}
+		},
+	}
+
+	// Add a few more Trump-specific functions
+	e.builtins["MAKE_IT_HUGE"] = &Builtin{
+		Fn: func(args ...Object) Object {
+			if len(args) != 1 {
+				return newError("wrong number of arguments for MAKE_IT_HUGE. got=%d, want=1", len(args))
+			}
+
+			// For numbers, multiply by 10
+			if args[0].Type() == INTEGER_OBJ {
+				val := args[0].(*Integer).Value
+				return &Integer{Value: val * 10}
+			}
+			if args[0].Type() == FLOAT_OBJ {
+				val := args[0].(*Float).Value
+				return &Float{Value: val * 10}
+			}
+
+			// For strings, return uppercase with "HUGE" added
+			if args[0].Type() == STRING_OBJ {
+				val := args[0].(*String).Value
+				return &String{Value: val + " - IT'S HUGE!"}
+			}
+
+			return args[0]
 		},
 	}
 }

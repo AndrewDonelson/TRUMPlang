@@ -31,8 +31,11 @@ func (l *Lexer) peekWord() string {
 	currentColumn := l.column
 
 	// Read the next word
-	l.readChar() // Move past the current character
-	word := l.readWord()
+	word := ""
+	l.skipWhitespace()
+	if isLetter(l.ch) {
+		word = l.readIdentifier()
+	}
 
 	// Restore position
 	l.position = currentPos
@@ -44,7 +47,7 @@ func (l *Lexer) peekWord() string {
 	return word
 }
 
-// Read a complete word (identifier)
+// Read a word that might include colons (for FAKE NEWS:)
 func (l *Lexer) readWord() string {
 	position := l.position
 	for isLetter(l.ch) || isDigit(l.ch) || l.ch == ':' {
@@ -121,6 +124,8 @@ func formatMultiLineComment(comment string) string {
 // Read a string literal
 func (l *Lexer) readString() string {
 	position := l.position + 1 // Skip the opening double quote
+	startLine := l.line
+	startColumn := l.column
 
 	for {
 		l.readChar()
@@ -130,12 +135,17 @@ func (l *Lexer) readString() string {
 		// Handle escape sequences
 		if l.ch == '\\' {
 			l.readChar() // Skip the backslash
-			// Could handle specific escape sequences here
+		}
+
+		// Handle newlines in strings
+		if l.ch == '\n' {
+			l.line++
+			l.column = 0
 		}
 	}
 
 	if l.ch == 0 {
-		errorMsg := errors.NewTrumpError(errors.UNTERMINATED_STRING, "Unterminated string", l.line, l.column)
+		errorMsg := errors.NewTrumpError(errors.UNTERMINATED_STRING, "Unterminated string", startLine, startColumn)
 		l.addError(errorMsg)
 	}
 
@@ -162,13 +172,13 @@ func (l *Lexer) readNumber() token.Token {
 		}
 	}
 
-	tokenType := token.TokenType(token.INT)
+	tokenType := token.INT
 	if isFloat {
-		tokenType = token.TokenType(token.FLOAT)
+		tokenType = token.FLOAT
 	}
 
 	return token.Token{
-		Type:    tokenType,
+		Type:    token.TokenType(tokenType),
 		Literal: l.input[position:l.position],
 		Line:    startLine,
 		Column:  startColumn,

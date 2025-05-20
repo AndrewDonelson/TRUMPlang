@@ -1,0 +1,104 @@
+// file: main.trump
+// Main entry point for TRUMP
+// The best programming language in the world, believe me!
+
+/* 
+ * This is the main entry file for any TRUMP language program
+ * Following the Go convention, we use main.trump as our entry point
+ * NOBODY has a better entry point than this, believe me folks!
+ */
+
+// Welcome message
+TWEET "Welcome to the TRUMP Programming Language!";
+TWEET "The GREATEST language ever created, believe me!";
+TWEET "---------------------------------------";
+
+// Initialize some variables
+YUGE version = "1.0.0";
+YUGE build_date = "2025-05-20";
+YUGE is_stable = WINNING;
+
+// Display program info
+TWEET "Version: " + version;
+TWEET "Build Date: " + build_date;
+
+// Use our amazing wall-building IF statement
+BUILD WALL IF (is_stable == WINNING) {
+    RALLY "This build is STABLE! The most stable code you've ever seen!";
+} ELSE {
+    EXECUTIVE_ORDER "WARNING: Unstable build! Worse than the economy under the previous administration!";
+}
+
+// Define our tremendously great main function
+YUGE FUNCTION run_main() RATED 10/10 {
+    TWEET "Executing main program...";
+    
+    // Call our example code
+    run_examples();
+    
+    TWEET "Program execution complete. TREMENDOUS SUCCESS!";
+    RETURN "Program completed with status: WINNING";
+}
+
+// Function to demonstrate TRUMP language features
+YUGE FUNCTION run_examples() RATED 9/10 {
+    TWEET "Demonstrating TRUMP language features:";
+    
+    // Demonstrate loops
+    demonstrate_loops();
+    
+    // Demonstrate arrays
+    demonstrate_arrays();
+    
+    // Demonstrate functions
+    greet("World");
+    greet("America");
+    
+    RETURN "Examples run successfully";
+}
+
+// A function to demonstrate loops
+YUGE FUNCTION demonstrate_loops() RATED 8/10 {
+    TWEET "LOOP DEMONSTRATION:";
+    
+    // While loop example
+    YUGE counter = 0;
+    MAKE DEALS WHILE (counter < 3) {
+        TWEET "While loop iteration #" + counter;
+        counter = counter + 1;
+    }
+    
+    // For loop example
+    MAKE AMERICA GREAT AGAIN FOR (YUGE i = 0; i < 3; i = i + 1) {
+        TWEET "For loop iteration #" + i;
+    }
+    
+    RETURN "Loops demonstrated";
+}
+
+// Demonstrate arrays and built-in functions
+YUGE FUNCTION demonstrate_arrays() RATED 8/10 {
+    TWEET "ARRAY DEMONSTRATION:";
+    
+    // Create and manipulate an array
+    YUGE numbers = [3, 1, 45, 2, 6];
+    TWEET "Original array: " + numbers;
+    
+    // Use built-in functions
+    TWEET "Sorted array: " + TREMENDOUS_SORT(numbers);
+    TWEET "America First array: " + AMERICA_FIRST(numbers);
+    
+    RETURN "Arrays demonstrated";
+}
+
+// Function to greet someone
+YUGE FUNCTION greet(name) RATED 10/10 {
+    TWEET "Hello, " + name + "! You're doing a FANTASTIC job!";
+    RETURN "Greeted " + name;
+}
+
+// Execute the main function
+run_main();
+
+// End with a rally message
+RALLY "MAKING PROGRAMMING GREAT AGAIN!";

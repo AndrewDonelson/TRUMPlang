@@ -57,6 +57,7 @@ func (p *Parser) parseLetStatement() *LetStatement {
 	p.nextToken()
 	stmt.Value = p.parseExpression(LOWEST)
 
+	// Allow optional semicolon
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
@@ -72,6 +73,7 @@ func (p *Parser) parseReturnStatement() *ReturnStatement {
 
 	stmt.ReturnValue = p.parseExpression(LOWEST)
 
+	// Allow optional semicolon
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
@@ -87,6 +89,7 @@ func (p *Parser) parseTweetStatement() *TweetStatement {
 
 	stmt.Value = p.parseExpression(LOWEST)
 
+	// Allow optional semicolon
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
@@ -102,6 +105,7 @@ func (p *Parser) parseRallyStatement() *RallyStatement {
 
 	stmt.Value = p.parseExpression(LOWEST)
 
+	// Allow optional semicolon
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
@@ -117,6 +121,7 @@ func (p *Parser) parseExecutiveOrderStatement() *ExecutiveOrderStatement {
 
 	stmt.Value = p.parseExpression(LOWEST)
 
+	// Allow optional semicolon
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}

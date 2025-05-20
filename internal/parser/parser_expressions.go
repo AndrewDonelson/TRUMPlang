@@ -65,7 +65,7 @@ func (p *Parser) parseForStatement() *ForStatement {
 	p.nextToken()
 
 	// Parse update
-	stmt.Update = p.parseStatement()
+	stmt.Update = p.parseExpressionStatement()
 
 	if !p.expectPeek(token.RPAREN) {
 		p.addError(errors.UNEXPECTED_TOKEN, "Expected ')' after update")
@@ -93,6 +93,12 @@ func (p *Parser) parseBlockStatement() *BlockStatement {
 	p.nextToken()
 
 	for !p.curTokenIs(token.RBRACE) && !p.curTokenIs(token.EOF) {
+		// Skip comments within blocks
+		if p.curTokenIs(token.COMMENT) {
+			p.nextToken()
+			continue
+		}
+
 		stmt := p.parseStatement()
 		if stmt != nil {
 			block.Statements = append(block.Statements, stmt)
@@ -109,6 +115,7 @@ func (p *Parser) parseExpressionStatement() *ExpressionStatement {
 
 	stmt.Expression = p.parseExpression(LOWEST)
 
+	// Allow optional semicolon
 	if p.peekTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
@@ -118,6 +125,11 @@ func (p *Parser) parseExpressionStatement() *ExpressionStatement {
 
 // Parse an expression
 func (p *Parser) parseExpression(precedence int) Expression {
+	// Skip any comments before the expression
+	if p.curTokenIs(token.COMMENT) {
+		p.nextToken()
+	}
+
 	prefix := p.prefixParseFns[p.curToken.Type]
 	if prefix == nil {
 		p.noPrefixParseFnError(p.curToken.Type)

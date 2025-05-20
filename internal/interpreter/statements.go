@@ -77,13 +77,17 @@ func (e *Evaluator) evalIfStatement(is *parser.IfStatement) Object {
 // Evaluate a while statement
 func (e *Evaluator) evalWhileStatement(ws *parser.WhileStatement) Object {
 	var result Object = e.NULL
+	maxIterations := 10000 // Prevent infinite loops
 
 	condition := e.Eval(ws.Condition)
 	if IsError(condition) {
 		return condition
 	}
 
-	for IsTruthy(condition) {
+	iterations := 0
+	for IsTruthy(condition) && iterations < maxIterations {
+		iterations++
+
 		result = e.Eval(ws.Body)
 
 		if result != nil {
@@ -99,6 +103,10 @@ func (e *Evaluator) evalWhileStatement(ws *parser.WhileStatement) Object {
 		}
 	}
 
+	if iterations >= maxIterations {
+		return newError("While loop exceeded maximum iterations (possible infinite loop)")
+	}
+
 	return result
 }
 
@@ -107,6 +115,7 @@ func (e *Evaluator) evalForStatement(fs *parser.ForStatement) Object {
 	// Create a new environment for the for loop
 	outerEnv := e.env
 	e.env = NewEnclosedEnvironment(outerEnv)
+	maxIterations := 10000 // Prevent infinite loops
 
 	// Initialize
 	initResult := e.Eval(fs.Init)
@@ -116,6 +125,7 @@ func (e *Evaluator) evalForStatement(fs *parser.ForStatement) Object {
 	}
 
 	var result Object = e.NULL
+	iterations := 0
 
 	// Check condition
 	condition := e.Eval(fs.Condition)
@@ -124,7 +134,9 @@ func (e *Evaluator) evalForStatement(fs *parser.ForStatement) Object {
 		return condition
 	}
 
-	for IsTruthy(condition) {
+	for IsTruthy(condition) && iterations < maxIterations {
+		iterations++
+
 		// Execute body
 		result = e.Eval(fs.Body)
 
@@ -149,6 +161,11 @@ func (e *Evaluator) evalForStatement(fs *parser.ForStatement) Object {
 			e.env = outerEnv // Restore environment
 			return condition
 		}
+	}
+
+	if iterations >= maxIterations {
+		e.env = outerEnv // Restore environment
+		return newError("For loop exceeded maximum iterations (possible infinite loop)")
 	}
 
 	e.env = outerEnv // Restore environment

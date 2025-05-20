@@ -1,4 +1,4 @@
-// file: internal/parser/parser_helpers.go
+// file: internal/parser/helpers.go
 // description: Helper functions for the TRUMP language parser
 
 package parser
@@ -66,4 +66,18 @@ func (p *Parser) curPrecedence() int {
 		return p
 	}
 	return LOWEST
+}
+
+// Add a parsing error with code and message
+func (p *Parser) addError(code, msg string) {
+	line, column := p.curToken.Line, p.curToken.Column
+	err := errors.NewTrumpError(code, msg, line, column)
+	p.errors = append(p.errors, err)
+}
+
+// Skip comments and move to next non-comment token
+func (p *Parser) skipComments() {
+	for p.curTokenIs(token.COMMENT) {
+		p.nextToken()
+	}
 }
