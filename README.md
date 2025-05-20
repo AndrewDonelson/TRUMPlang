@@ -4,7 +4,7 @@ A tremendously great programming language - the best language, believe me!
 
 ## Overview
 
-TRUMP is a satirical programming language inspired by the rhetoric of former U.S. President Donald Trump. It combines humor with actual programming language features to create a fully functional, if unconventional, programming experience.
+TRUMP is a satirical programming language inspired by the speaking style of U.S. President Donald Trump. It combines humor with actual programming language features to create a fully functional, if unconventional, programming experience.
 
 ## Installation
 
